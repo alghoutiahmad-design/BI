@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Faster Rent A Car — Cash Deficit Report</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+  .num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+  .grad-red { background: linear-gradient(135deg, #7f1d1d 0%, #b91c1c 50%, #dc2626 100%); }
+  .grad-amber { background: linear-gradient(135deg, #78350f 0%, #b45309 50%, #d97706 100%); }
+  .grad-emerald { background: linear-gradient(135deg, #064e3b 0%, #047857 50%, #059669 100%); }
+  .grad-slate { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%); }
+  .card { background: white; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(15,23,42,0.05); }
+  .ring-soft { box-shadow: inset 0 0 0 1px rgba(15,23,42,0.06); }
+  .pill { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:9999px; font-size:11px; font-weight:600; letter-spacing:0.02em; }
+  .row-divider > * + * { border-top: 1px solid #f1f5f9; }
+  .arrow-down::after { content: "↓"; }
+  .arrow-up::after { content: "↑"; }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+<!-- Header -->
+<header class="bg-slate-900 text-white">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-lg bg-red-600 flex items-center justify-center font-bold text-lg">F</div>
+          <span class="text-sm font-semibold uppercase tracking-widest text-slate-400">Faster Rent A Car</span>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-extrabold leading-tight">Cash Deficit Report</h1>
+        <p class="text-slate-400 mt-1 text-sm">Period: <span class="text-white font-semibold">1 March 2026 → 6 May 2026</span> · 67 days</p>
+      </div>
+      <div class="text-right">
+        <div class="text-xs text-slate-400 uppercase tracking-widest">Reported</div>
+        <div class="text-lg font-semibold">06 May 2026</div>
+        <div class="text-xs text-slate-400 mt-1">Source: Faster Cash Daily Follow up</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+  <!-- TL;DR strip -->
+  <section class="grad-red rounded-2xl text-white p-8 shadow-xl">
+    <div class="flex items-start gap-4">
+      <div class="text-5xl leading-none">⚠</div>
+      <div class="flex-1">
+        <div class="text-xs uppercase tracking-widest text-red-200 mb-1">Bottom line</div>
+        <h2 class="text-2xl md:text-3xl font-bold mb-3">The bank balance grew by AED 248,527 — but operations actually <u>burned AED 1,437,404</u>.</h2>
+        <p class="text-red-100 max-w-3xl">The gap is hidden by AED 1,170,638 of new loans and AED 417,100 of <em>deferred</em> loan repayments. Strip those out and the company is effectively <strong class="text-white">AED 904,189 underwater</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPI Row -->
+  <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="card p-5">
+      <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Opening Balance</div>
+      <div class="text-xs text-slate-400 mt-0.5">01 Mar 2026</div>
+      <div class="num text-3xl font-bold mt-3 text-slate-900">435,022</div>
+      <div class="text-xs text-slate-500 mt-1">AED</div>
+    </div>
+    <div class="card p-5">
+      <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Cash on Hand Today</div>
+      <div class="text-xs text-slate-400 mt-0.5">06 May 2026</div>
+      <div class="num text-3xl font-bold mt-3 text-slate-900">683,549</div>
+      <div class="text-xs text-emerald-600 font-semibold mt-1">+AED 248,527 vs opening</div>
+    </div>
+    <div class="card p-5 ring-soft" style="background:#fef2f2">
+      <div class="text-xs font-semibold text-red-700 uppercase tracking-wider">Real Operating Deficit</div>
+      <div class="text-xs text-red-500 mt-0.5">Cumulative</div>
+      <div class="num text-3xl font-bold mt-3 text-red-700">−1,437,404</div>
+      <div class="text-xs text-red-600 mt-1 font-semibold">After loans & deferrals stripped</div>
+    </div>
+    <div class="card p-5 ring-soft" style="background:#fffbeb">
+      <div class="text-xs font-semibold text-amber-700 uppercase tracking-wider">If No Loans / No Deferrals</div>
+      <div class="text-xs text-amber-600 mt-0.5">Hypothetical balance</div>
+      <div class="num text-3xl font-bold mt-3 text-amber-700">−904,189</div>
+      <div class="text-xs text-amber-700 mt-1 font-semibold">The company would be insolvent</div>
+    </div>
+  </section>
+
+  <!-- Waterfall: how we got from 435k to 683k -->
+  <section class="card p-6">
+    <div class="flex items-baseline justify-between mb-1">
+      <h3 class="text-lg font-bold">How the bank got from 435,022 to 683,549</h3>
+      <span class="pill bg-slate-100 text-slate-700">Sources of cash</span>
+    </div>
+    <p class="text-sm text-slate-500 mb-5">The headline +248k looks fine. The breakdown shows it's all debt-funded.</p>
+    <div class="h-72">
+      <canvas id="waterfall"></canvas>
+    </div>
+  </section>
+
+  <!-- Two-col: Monthly deficit + Expense pie -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <div class="card p-6">
+      <div class="flex items-baseline justify-between mb-1">
+        <h3 class="text-lg font-bold">Monthly Deficit</h3>
+        <span class="pill bg-red-100 text-red-700">Per-month burn</span>
+      </div>
+      <p class="text-sm text-slate-500 mb-5">March alone consumed 60% of the cumulative deficit.</p>
+      <div class="h-64">
+        <canvas id="monthlyDeficit"></canvas>
+      </div>
+      <div class="row-divider mt-4 text-sm">
+        <div class="flex justify-between py-2"><span class="text-slate-600">March 2026</span><span class="num font-semibold text-red-700">−861,846</span></div>
+        <div class="flex justify-between py-2"><span class="text-slate-600">April 2026</span><span class="num font-semibold text-red-700">−207,591</span></div>
+        <div class="flex justify-between py-2"><span class="text-slate-600">May 2026 (to 6th)</span><span class="num font-semibold text-red-700">−168,380</span></div>
+        <div class="flex justify-between py-3 bg-red-50 -mx-6 px-6 mt-2 rounded-b-2xl">
+          <span class="font-bold text-red-900">Cumulative</span><span class="num font-extrabold text-red-700">−1,237,817</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-6">
+      <div class="flex items-baseline justify-between mb-1">
+        <h3 class="text-lg font-bold">Where the Cash Went</h3>
+        <span class="pill bg-slate-100 text-slate-700">Top expense categories</span>
+      </div>
+      <p class="text-sm text-slate-500 mb-5">Total outflows: AED 3,930,430</p>
+      <div class="h-64">
+        <canvas id="expenseChart"></canvas>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Sources of cash table -->
+  <section class="card p-6">
+    <h3 class="text-lg font-bold mb-1">Cash Sources Stripped Apart</h3>
+    <p class="text-sm text-slate-500 mb-5">Operational vs. financing — what was earned vs. what was borrowed.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="rounded-xl ring-soft p-5">
+        <div class="flex items-center justify-between mb-3">
+          <span class="pill bg-emerald-100 text-emerald-700">Operating</span>
+          <span class="num font-bold text-slate-900">2,572,119</span>
+        </div>
+        <ul class="text-sm space-y-2">
+          <li class="flex justify-between"><span>Cash sales</span><span class="num text-slate-700">2,561,019</span></li>
+          <li class="flex justify-between"><span>Insurance claims</span><span class="num text-slate-700">11,100</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-xl ring-soft p-5" style="background:#fffbeb">
+        <div class="flex items-center justify-between mb-3">
+          <span class="pill bg-amber-100 text-amber-800">Debt & one-offs</span>
+          <span class="num font-bold text-slate-900">1,606,838</span>
+        </div>
+        <ul class="text-sm space-y-2">
+          <li class="flex justify-between"><span>Bank loans</span><span class="num text-slate-700">620,138</span></li>
+          <li class="flex justify-between"><span>Investors loan</span><span class="num text-slate-700">550,500</span></li>
+          <li class="flex justify-between"><span>Mhd Galal loan</span><span class="num text-slate-700">100,000</span></li>
+          <li class="flex justify-between"><span>Cars sales (assets)</span><span class="num text-slate-700">386,200</span></li>
+          <li class="flex justify-between border-t border-amber-200 pt-2 mt-1"><span>− Capital purchases (cars)</span><span class="num text-slate-700">−388,007</span></li>
+          <li class="flex justify-between font-semibold"><span>Loan deferrals (Apr+May, still in pocket)</span><span class="num text-slate-900">+417,100</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-5 p-5 rounded-xl bg-slate-900 text-white">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+        <div>
+          <div class="text-slate-400 uppercase tracking-wider text-[11px] font-semibold">Opening + all inflows</div>
+          <div class="num text-2xl font-bold">2,120,953</div>
+          <div class="text-slate-400 text-xs mt-1">If we'd spent zero, the bank would hold this.</div>
+        </div>
+        <div>
+          <div class="text-slate-400 uppercase tracking-wider text-[11px] font-semibold">Actual today</div>
+          <div class="num text-2xl font-bold">683,549</div>
+          <div class="text-slate-400 text-xs mt-1">What the bank statement shows.</div>
+        </div>
+        <div>
+          <div class="text-red-300 uppercase tracking-wider text-[11px] font-semibold">Operating burn</div>
+          <div class="num text-2xl font-extrabold text-red-300">−1,437,404</div>
+          <div class="text-slate-400 text-xs mt-1">Operations consumed this much above income.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Top expenses table -->
+  <section class="card p-6">
+    <h3 class="text-lg font-bold mb-1">Top 12 Outflow Categories</h3>
+    <p class="text-sm text-slate-500 mb-5">All values in AED · 1 Mar → 6 May 2026</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-slate-500 text-[11px] uppercase tracking-wider border-b border-slate-200">
+            <th class="text-left py-2 font-semibold">#</th>
+            <th class="text-left py-2 font-semibold">Category</th>
+            <th class="text-left py-2 font-semibold">Type</th>
+            <th class="text-right py-2 font-semibold">Amount</th>
+            <th class="text-right py-2 font-semibold">% of Outflows</th>
+            <th class="text-left py-2 font-semibold pl-4">Share</th>
+          </tr>
+        </thead>
+        <tbody id="expRows" class="row-divider"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Anomalies -->
+  <section class="card p-6 border-l-4 border-amber-400">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="text-2xl">🔍</span>
+      <h3 class="text-lg font-bold">Data Anomalies Worth Reviewing</h3>
+    </div>
+    <ul class="space-y-3 text-sm">
+      <li class="flex gap-3">
+        <span class="text-amber-600 font-bold">⚠</span>
+        <div>
+          <div class="font-semibold">Investors Loan inconsistency</div>
+          <div class="text-slate-600">Cash Receipts column shows <span class="num font-semibold">450,500</span> but the financing summary shows <span class="num font-semibold">550,500</span> — a 100,000 gap.</div>
+        </div>
+      </li>
+      <li class="flex gap-3">
+        <span class="text-amber-600 font-bold">⚠</span>
+        <div>
+          <div class="font-semibold">Mhd Galal inconsistency</div>
+          <div class="text-slate-600">Cash Receipts shows <span class="num font-semibold">150,000</span> but financing summary shows <span class="num font-semibold">100,000</span> — likely 50k mis-classified.</div>
+        </div>
+      </li>
+      <li class="flex gap-3">
+        <span class="text-amber-600 font-bold">⚠</span>
+        <div>
+          <div class="font-semibold">"Lent Suppliers and VIP" is the largest single bucket: AED 737,527</div>
+          <div class="text-slate-600">Worth a separate breakdown — these are receivables / inter-company that should eventually return cash.</div>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- The narrative box -->
+  <section class="grad-slate rounded-2xl text-white p-8">
+    <div class="text-xs uppercase tracking-widest text-slate-400 mb-2">The narrative in one paragraph</div>
+    <p class="text-lg leading-relaxed">
+      Faster Rent A Car opened March with <span class="font-bold text-white num">AED 435,022</span>. Over 67 days it generated
+      <span class="num font-semibold">AED 2.57M</span> in operational revenue — but spent <span class="num font-semibold">AED 3.93M</span>.
+      The cash gap was filled by <span class="text-amber-300 font-semibold num">AED 1.17M</span> in fresh loans (banks, investors, Mhd Galal),
+      <span class="text-amber-300 font-semibold num">AED 417k</span> in deferred loan repayments, and a small <span class="num">−1,807</span> from buying/selling fleet cars.
+      Today the bank shows <span class="font-bold text-white num">AED 683,549</span> — but the company's <em>real</em> operating deficit over the period is
+      <span class="text-red-300 font-extrabold num">AED 1,437,404</span>.
+    </p>
+  </section>
+
+  <footer class="text-center text-xs text-slate-400 py-6">
+    Generated 06 May 2026 · Source: <span class="font-mono">Faster Cash Daily Follow up</span> Google Sheet · Built for internal review.
+  </footer>
+
+</main>
+
+<script>
+  const fmt = (n) => new Intl.NumberFormat('en-US').format(Math.round(n));
+  const aed = (n) => 'AED ' + fmt(n);
+
+  // ===== Waterfall =====
+  // Bars: Opening, +Cash sales, +Bank loans, +Investors, +Mhd Galal, +Insurance, +Car sales, -Capex, -OPEX, -CAPEX/withdraws, =Today
+  const waterfallData = [
+    { label: 'Opening', value: 435022, type: 'start' },
+    { label: 'Cash sales', value: 2561019, type: 'in' },
+    { label: 'Bank loans', value: 620138, type: 'in-debt' },
+    { label: 'Investors loan', value: 550500, type: 'in-debt' },
+    { label: 'Mhd Galal', value: 100000, type: 'in-debt' },
+    { label: 'Insurance', value: 11100, type: 'in' },
+    { label: 'Car sales', value: 386200, type: 'in' },
+    { label: 'OPEX', value: -2967292, type: 'out' },
+    { label: 'CAPEX & withdraws', value: -963138, type: 'out' },
+    { label: 'Today', value: 683549, type: 'end' }
+  ];
+
+  const colorFor = (t) => ({
+    'start':   '#0f172a',
+    'in':      '#10b981',
+    'in-debt': '#f59e0b',
+    'out':     '#ef4444',
+    'end':     '#0f172a'
+  }[t]);
+
+  // Build floating bars
+  let running = 0;
+  const wfDataset = waterfallData.map((b, i) => {
+    if (b.type === 'start' || b.type === 'end') {
+      const v = b.value;
+      running = b.type === 'start' ? v : running;
+      return { from: 0, to: v };
+    } else {
+      const from = running;
+      running += b.value;
+      return { from: Math.min(from, running), to: Math.max(from, running) };
+    }
+  });
+
+  new Chart(document.getElementById('waterfall'), {
+    type: 'bar',
+    data: {
+      labels: waterfallData.map(b => b.label),
+      datasets: [{
+        data: wfDataset.map(d => [d.from, d.to]),
+        backgroundColor: waterfallData.map(b => colorFor(b.type)),
+        borderRadius: 6,
+        barPercentage: 0.7
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const b = waterfallData[ctx.dataIndex];
+              if (b.type === 'start' || b.type === 'end') return aed(b.value);
+              return (b.value >= 0 ? '+' : '') + aed(b.value);
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+        y: { ticks: { callback: (v) => fmt(v) }, grid: { color: '#f1f5f9' } }
+      }
+    }
+  });
+
+  // ===== Monthly deficit chart =====
+  new Chart(document.getElementById('monthlyDeficit'), {
+    type: 'bar',
+    data: {
+      labels: ['March 2026', 'April 2026', 'May 2026 (to 6th)'],
+      datasets: [{
+        label: 'Monthly Deficit (AED)',
+        data: [-861846, -207591, -168380],
+        backgroundColor: ['#dc2626', '#f59e0b', '#f59e0b'],
+        borderRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => aed(ctx.raw) } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { ticks: { callback: (v) => fmt(v) }, grid: { color: '#f1f5f9' } }
+      }
+    }
+  });
+
+  // ===== Top expenses =====
+  const expenses = [
+    { name: 'Lent Suppliers and VIP', type: 'Receivable', val: 737527 },
+    { name: 'Wages',                  type: 'OPEX',       val: 507688 },
+    { name: 'Alaan Refill',           type: 'OPEX',       val: 412975 },
+    { name: 'Capital purchases',      type: 'CAPEX',      val: 388007 },
+    { name: 'Petty Cash Refill',      type: 'OPEX',       val: 381500 },
+    { name: 'Loan principal payment', type: 'CAPEX',      val: 372241 },
+    { name: 'Repairs and maintenance',type: 'OPEX',       val: 344059 },
+    { name: 'Advertising & Marketing',type: 'OPEX',       val: 168319 },
+    { name: 'Cars Renewal (Ins/GPS)', type: 'OPEX',       val: 149564 },
+    { name: 'Mr Basem withdraws',     type: 'Withdraw',   val: 114922 },
+    { name: 'Family Expenses',        type: 'Withdraw',   val: 69750 },
+    { name: 'VAT & Tax',              type: 'OPEX',       val: 66923 }
+  ];
+  const totalOut = 3930430;
+
+  // Pie / doughnut
+  new Chart(document.getElementById('expenseChart'), {
+    type: 'doughnut',
+    data: {
+      labels: expenses.slice(0, 8).map(e => e.name).concat(['Other']),
+      datasets: [{
+        data: expenses.slice(0, 8).map(e => e.val).concat([totalOut - expenses.slice(0, 8).reduce((s, e) => s + e.val, 0)]),
+        backgroundColor: ['#dc2626','#f59e0b','#0ea5e9','#8b5cf6','#10b981','#ef4444','#f97316','#6366f1','#94a3b8'],
+        borderWidth: 2,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 12 } },
+        tooltip: { callbacks: { label: (ctx) => ctx.label + ': ' + aed(ctx.raw) + ' (' + ((ctx.raw/totalOut)*100).toFixed(1) + '%)' } }
+      },
+      cutout: '55%'
+    }
+  });
+
+  // Render expenses table
+  const typeColors = {
+    'OPEX':       'bg-blue-100 text-blue-800',
+    'CAPEX':      'bg-purple-100 text-purple-800',
+    'Withdraw':   'bg-rose-100 text-rose-800',
+    'Receivable': 'bg-amber-100 text-amber-800'
+  };
+
+  const tbody = document.getElementById('expRows');
+  expenses.forEach((e, i) => {
+    const pct = (e.val / totalOut) * 100;
+    const tr = document.createElement('tr');
+    tr.className = 'hover:bg-slate-50';
+    tr.innerHTML = `
+      <td class="py-3 text-slate-400 font-mono text-xs">${i+1}</td>
+      <td class="py-3 font-medium">${e.name}</td>
+      <td class="py-3"><span class="pill ${typeColors[e.type]}">${e.type}</span></td>
+      <td class="py-3 text-right num font-semibold">${fmt(e.val)}</td>
+      <td class="py-3 text-right num text-slate-600">${pct.toFixed(1)}%</td>
+      <td class="py-3 pl-4 w-48">
+        <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full bg-red-500 rounded-full" style="width:${Math.min(pct*5, 100)}%"></div>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+</script>
+
+</body>
+</html>
